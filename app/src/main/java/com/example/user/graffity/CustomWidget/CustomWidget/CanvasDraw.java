@@ -39,10 +39,10 @@ public class CanvasDraw extends View {
     public CanvasDraw(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
-        ActionBarHeight = getResources().getDimensionPixelSize(getResources().getIdentifier("status_bar_height", "dimen", "android"));
-        NavigationHeight = getResources().getDimensionPixelSize(getResources().getIdentifier("navigation_bar_height", "dimen", "android"));
+//        ActionBarHeight = getResources().getDimensionPixelSize(getResources().getIdentifier("status_bar_height", "dimen", "android"));
+//        NavigationHeight = getResources().getDimensionPixelSize(getResources().getIdentifier("navigation_bar_height", "dimen", "android"));
 
-        mBitmap.createBitmap(getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels + ActionBarHeight + NavigationHeight, Bitmap.Config.ARGB_8888);
+        mBitmap =  mBitmap.createBitmap(getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels, Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
         mCanvas.drawColor(Color.BLACK);
 
@@ -50,14 +50,15 @@ public class CanvasDraw extends View {
         mPaint.setColor(Color.YELLOW);
         mPaint.setStrokeWidth(6);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mPaint.setStyle(Paint.Style.STROKE);
 
         mPath = new Path();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        mCanvas.drawBitmap(mBitmap, 0, 0, null);
-
+        canvas.drawBitmap(mBitmap, 0, 0, null);
         mCanvas.drawPath(mPath, mPaint);
     }
 
