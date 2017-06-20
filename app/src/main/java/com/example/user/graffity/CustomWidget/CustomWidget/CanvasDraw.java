@@ -44,7 +44,7 @@ public class CanvasDraw extends View {
 
         mBitmap =  mBitmap.createBitmap(getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels, Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
-        mCanvas.drawColor(Color.BLACK);
+        mCanvas.drawColor(Color.TRANSPARENT);
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
         mPaint.setColor(Color.YELLOW);
