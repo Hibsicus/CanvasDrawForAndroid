@@ -21,6 +21,7 @@ public class CanvasDraw extends View {
     private static final int MIN_MOVE_DIS = 5;
 
     private float preX, preY, dx, dy;
+    private float x, y;
 
     private int NavigationHeight;
     private int ActionBarHeight;
@@ -30,7 +31,10 @@ public class CanvasDraw extends View {
     Bitmap mBitmap;
     Path mPath;
 
+    int smallRadiu;
+    Paint SmallRadiuPaint;
 
+    boolean isTouch;
 
     public CanvasDraw(Context context) {
         super(context);
@@ -41,6 +45,9 @@ public class CanvasDraw extends View {
 
 //        ActionBarHeight = getResources().getDimensionPixelSize(getResources().getIdentifier("status_bar_height", "dimen", "android"));
 //        NavigationHeight = getResources().getDimensionPixelSize(getResources().getIdentifier("navigation_bar_height", "dimen", "android"));
+
+        isTouch = false;
+        smallRadiu = 6;
 
         mBitmap =  mBitmap.createBitmap(getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels, Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
@@ -53,20 +60,29 @@ public class CanvasDraw extends View {
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStyle(Paint.Style.STROKE);
 
+        SmallRadiuPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
+        SmallRadiuPaint.setColor(Color.BLACK);
+        SmallRadiuPaint.setStrokeWidth(1);
+        SmallRadiuPaint.setStrokeJoin(Paint.Join.ROUND);
+        SmallRadiuPaint.setStrokeCap(Paint.Cap.ROUND);
+        SmallRadiuPaint.setStyle(Paint.Style.STROKE);
+
         mPath = new Path();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawBitmap(mBitmap, 0, 0, null);
+        if(isTouch)
+            canvas.drawCircle(x,y,smallRadiu,SmallRadiuPaint);
         mCanvas.drawPath(mPath, mPaint);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        float x = event.getX();
-        float y = event.getY();
+        x = event.getX();
+        y = event.getY();
 
         switch(event.getAction())
         {
@@ -74,6 +90,7 @@ public class CanvasDraw extends View {
                 mPath.moveTo(x,y);
                 preX = x;
                 preY = y;
+                isTouch = true;
                 break;
             case MotionEvent.ACTION_MOVE:
                 dx = Math.abs(x - preX);
@@ -84,6 +101,9 @@ public class CanvasDraw extends View {
                     preX = x;
                     preY = y;
                 }
+                break;
+            case MotionEvent.ACTION_UP:
+                isTouch = false;
                 break;
         }
         invalidate();

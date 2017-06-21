@@ -94,10 +94,21 @@ public class ColorPicker extends View {
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN://按下
+                length = getLength(event.getX(), event.getY(), CenterPoint.x, CenterPoint.y);
+                if(length > BigCircle - CenterRadius)
+                    return true;
                 break;
             case MotionEvent.ACTION_MOVE: //移動
+                length = getLength(event.getX(), event.getY(), CenterPoint.x, CenterPoint.y);
+                if(length <= BigCircle - CenterRadius){
+                    SelectPosition.set((int)event.getX(), (int)event.getY());
+                }else{
+                    SelectPosition = getBorderPoint(CenterPoint, new Point((int)event.getX(), (int)event.getY()), BigCircle - CenterRadius);
+                }
+                listener.onColorChanged(BackgroundBitmap.getPixel(SelectPosition.x, SelectPosition.y));
                 break;
         }
+        invalidate();
         return true;
     }
 
@@ -110,6 +121,24 @@ public class ColorPicker extends View {
     //計算距離
     public int getLength(float x1, float y1, float x2, float y2){
         return (int)Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+    }
+
+    //如果觸摸超過小圓範圍時，設置小圓邊緣
+    public Point getBorderPoint(Point a, Point b, int cutRadius)
+    {
+       float radian = getRadian(a,b);
+        return new Point(a.x + (int)(cutRadius * Math.cos(radian)), a.x + (int)(cutRadius * Math.sin(radian)));
+    }
+
+    //觸碰點跟中心的夾角
+    public float getRadian(Point a, Point b)
+    {
+        float lenA = b.x - a.x;
+        float lenB = b.y - a.y;
+        float lenC = (float)Math.sqrt(Math.pow(lenA, 2) + Math.pow(lenB, 2));
+        float ang = (float)Math.acos(lenA / lenC);
+        ang = ang * (b.y < a.y ? -1 : 1);
+        return ang;
     }
 
     public interface OnColorChangedListener{
