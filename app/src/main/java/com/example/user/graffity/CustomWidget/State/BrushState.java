@@ -3,6 +3,7 @@ package com.example.user.graffity.CustomWidget.State;
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 
+import com.example.user.graffity.CustomWidget.CustomWidget.CanvasDraw;
 import com.example.user.graffity.R;
 
 /**
@@ -17,7 +18,7 @@ public class BrushState extends CanvasState {
     }
 
     @Override
-    public void HandleState() {
+    public void HandleState(CanvasDraw mCanvasDraw) {
 
     }
 

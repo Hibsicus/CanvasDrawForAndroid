@@ -9,6 +9,8 @@ import android.graphics.Path;
 import android.icu.util.MeasureUnit;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.InflateException;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -16,7 +18,7 @@ import android.view.View;
  * Created by User on 2017/6/8.
  */
 
-public class CanvasDraw extends View {
+public class CanvasDraw extends View implements Runnable{
 
     private static final int MIN_MOVE_DIS = 5;
 
@@ -27,14 +29,17 @@ public class CanvasDraw extends View {
     private int ActionBarHeight;
 
     Paint mPaint;
+
     Canvas mCanvas;
     Bitmap mBitmap;
     Path mPath;
 
-    int smallRadiu;
+    int PaintRadiu;
     Paint SmallRadiuPaint;
 
     boolean isTouch;
+
+    int touchSeconds;
 
     public CanvasDraw(Context context) {
         super(context);
@@ -47,7 +52,8 @@ public class CanvasDraw extends View {
 //        NavigationHeight = getResources().getDimensionPixelSize(getResources().getIdentifier("navigation_bar_height", "dimen", "android"));
 
         isTouch = false;
-        smallRadiu = 6;
+        PaintRadiu = 6;
+        touchSeconds = 0;
 
         mBitmap =  mBitmap.createBitmap(getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels, Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
@@ -55,7 +61,7 @@ public class CanvasDraw extends View {
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
         mPaint.setColor(Color.YELLOW);
-        mPaint.setStrokeWidth(6);
+        mPaint.setStrokeWidth(PaintRadiu);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStyle(Paint.Style.STROKE);
@@ -73,8 +79,12 @@ public class CanvasDraw extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawBitmap(mBitmap, 0, 0, null);
-        if(isTouch)
-            canvas.drawCircle(x,y,smallRadiu,SmallRadiuPaint);
+        if(isTouch && touchSeconds < 2)
+            canvas.drawCircle(x,y,PaintRadiu,SmallRadiuPaint);
+        else if(isTouch && touchSeconds > 2)
+        {
+            canvas.drawCircle(preX,preY,PaintRadiu,SmallRadiuPaint);
+        }
         mCanvas.drawPath(mPath, mPaint);
     }
 
@@ -93,13 +103,16 @@ public class CanvasDraw extends View {
                 isTouch = true;
                 break;
             case MotionEvent.ACTION_MOVE:
-                dx = Math.abs(x - preX);
-                dy = Math.abs(y - preY);
-                if(dx >= MIN_MOVE_DIS || dy >= MIN_MOVE_DIS)
-                {
-                    mPath.quadTo(preX, preY, (x + preX) / 2.0f , (y + preY) / 2.0f);
-                    preX = x;
-                    preY = y;
+                if(touchSeconds < 2) {
+                    dx = Math.abs(x - preX);
+                    dy = Math.abs(y - preY);
+                    if (dx >= MIN_MOVE_DIS || dy >= MIN_MOVE_DIS) {
+                        mPath.quadTo(preX, preY, (x + preX) / 2.0f, (y + preY) / 2.0f);
+                        preX = x;
+                        preY = y;
+                    }
+                }else{
+                    PaintRadiu = getLength(preX, preY, x, y);
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -108,5 +121,27 @@ public class CanvasDraw extends View {
         }
         invalidate();
         return true;
+    }
+
+    private int getLength(float x1, float y1, float x2, float y2)
+    {
+        return (int)Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+    }
+
+    @Override
+    public void run() {
+        while(true) {
+            try {
+                if (isTouch)
+                    touchSeconds++;
+                else
+                    touchSeconds = 0;
+
+                mPaint.setStrokeWidth(PaintRadiu);
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
