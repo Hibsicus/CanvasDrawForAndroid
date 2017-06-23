@@ -1,5 +1,6 @@
 package com.example.user.graffity.CustomWidget.State;
 
+import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 
 import com.example.user.graffity.CustomWidget.CustomWidget.CanvasDraw;
@@ -18,7 +19,7 @@ public class EraserState extends CanvasState {
 
     @Override
     public void HandleState(CanvasDraw mCanvasDraw) {
-
+        mCanvasDraw.ChangePaint(CanvasDraw.PAINT_ERASER_PAINT);
     }
 
     @Override

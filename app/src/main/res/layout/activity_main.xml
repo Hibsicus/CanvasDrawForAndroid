@@ -26,6 +26,17 @@
         android:src="@drawable/palette_256"
         colorpicker:elevation="16dp" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/update_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="8dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/update_256"
+        colorpicker:elevation="16dp" />
+
     <FrameLayout
         android:id = "@+id/main_layout"
         android:layout_width="match_parent"

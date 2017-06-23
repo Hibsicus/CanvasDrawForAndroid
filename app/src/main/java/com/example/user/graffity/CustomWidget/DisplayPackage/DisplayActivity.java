@@ -38,7 +38,9 @@ public class DisplayActivity extends AppCompatActivity {
     ColorPicker ColorPickerDialog;
     FloatingActionButton Brush_Eraser;
     FloatingActionButton ColorPicker;
-    
+
+    int ChooseColor = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +80,7 @@ public class DisplayActivity extends AppCompatActivity {
         
         Brush_Eraser = (FloatingActionButton) findViewById(R.id.brush_eraser);
         ColorPicker = (FloatingActionButton) findViewById(R.id.color_picker_btn);
+        ColorPicker.setVisibility(View.INVISIBLE);
     }
     
     private void SetEvent()
@@ -87,41 +90,46 @@ public class DisplayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 CurrentState = CurrentState.ChangeState(Brush_Eraser);
+                CurrentState.HandleState(canvasFragment.GetChildCanvas());
             }
         });
 
-        //調色盤
-        ColorPicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //設置Layout和調色盤的點擊事件
-                View dialogView = getLayoutInflater().inflate(R.layout.colorpicker_dialog, null);
-                ColorPickerDialog = (ColorPicker) dialogView.findViewById(R.id.color_picker);
-                ColorPickerDialog.setOnColorChangedListener(new ColorPicker.OnColorChangedListener() {
-                    @Override
-                    public void onColorChanged(int color) {
-
-                    }
-                });
-                AlertDialog.Builder dialog = new AlertDialog.Builder(DisplayActivity.this);
-                dialog.setView(dialogView);
-                dialog.setTitle("調色盤");
-                dialog.setCancelable(false);
-                dialog.setPositiveButton("確認", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                dialog.show();
-            }
-        });
+//        //調色盤
+//        ColorPicker.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //設置Layout和調色盤的點擊事件
+//
+//                View dialogView = getLayoutInflater().inflate(R.layout.colorpicker_dialog, null);
+//                ColorPickerDialog = (ColorPicker) dialogView.findViewById(R.id.color_picker);
+//                ColorPickerDialog.setOnColorChangedListener(new ColorPicker.OnColorChangedListener() {
+//                    @Override
+//                    public void onColorChanged(int color) {
+//                       ChooseColor = color;
+//                    }
+//                });
+//                AlertDialog.Builder dialog = new AlertDialog.Builder(DisplayActivity.this);
+//                dialog.setView(dialogView);
+//                dialog.setTitle("調色盤");
+//                dialog.setCancelable(false);
+//                dialog.setPositiveButton("確認", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        if(canvasFragment != null)
+//                        {
+//                            canvasFragment.ChangePaintColor(ChooseColor);
+//                        }
+//                    }
+//                });
+//                dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                    }
+//                });
+//                dialog.show();
+//            }
+//        });
     }
 
     private void ShowCanvas()

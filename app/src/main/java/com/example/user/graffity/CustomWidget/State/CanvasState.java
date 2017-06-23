@@ -10,6 +10,7 @@ import com.example.user.graffity.CustomWidget.CustomWidget.CanvasDraw;
  */
 
 public abstract class CanvasState {
+    int OriginColor;
     abstract public CanvasState ChangeState(FloatingActionButton changed);
     abstract public void HandleState(CanvasDraw mCanvasDraw);
     abstract public float GetStateValue();

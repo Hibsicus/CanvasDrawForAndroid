@@ -29,6 +29,15 @@ public class CanvasFragment extends Fragment {
         return view;
     }
 
+    public void ChangePaintColor(int color)
+    {
+        mCanvasDraw.SetPaintColor(color);
+    }
+
+    public CanvasDraw GetChildCanvas()
+    {
+        return mCanvasDraw;
+    }
 
     @Override
     public void onDestroy() {

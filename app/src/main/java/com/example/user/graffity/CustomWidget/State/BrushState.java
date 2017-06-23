@@ -11,6 +11,7 @@ import com.example.user.graffity.R;
  */
 
 public class BrushState extends CanvasState {
+
     @Override
     public CanvasState ChangeState(FloatingActionButton changed) {
         changed.setImageResource(R.drawable.eraser_256);
@@ -19,7 +20,7 @@ public class BrushState extends CanvasState {
 
     @Override
     public void HandleState(CanvasDraw mCanvasDraw) {
-
+        mCanvasDraw.ChangePaint(CanvasDraw.PAINT_COLOR_PAINT);
     }
 
     @Override
