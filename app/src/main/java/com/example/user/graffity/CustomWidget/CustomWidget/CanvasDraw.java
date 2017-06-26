@@ -2,11 +2,14 @@ package com.example.user.graffity.CustomWidget.CustomWidget;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.icu.util.MeasureUnit;
@@ -16,6 +19,8 @@ import android.util.Log;
 import android.view.InflateException;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.example.user.graffity.R;
 
 /**
  * Created by User on 2017/6/8.
@@ -56,13 +61,16 @@ public class CanvasDraw extends View implements Runnable{
 
     int touchSeconds;
 
+    private Bitmap mShaderBitmap;
+    private Point mBitmapBrushDimensions;
+
     public CanvasDraw(Context context) {
         super(context);
     }
 
     public CanvasDraw(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        setLayerType(LAYER_TYPE_SOFTWARE, null);
+      //  setLayerType(LAYER_TYPE_SOFTWARE, null);
 //        ActionBarHeight = getResources().getDimensionPixelSize(getResources().getIdentifier("status_bar_height", "dimen", "android"));
 //        NavigationHeight = getResources().getDimensionPixelSize(getResources().getIdentifier("navigation_bar_height", "dimen", "android"));
 
@@ -77,14 +85,18 @@ public class CanvasDraw extends View implements Runnable{
         mCanvas = new Canvas(mBitmap);
         mCanvas.drawColor(Color.TRANSPARENT);
 
+        mShaderBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.light_brush02);
+        mBitmapBrushDimensions = new Point(mShaderBitmap.getWidth(), mShaderBitmap.getHeight());
+
         //畫筆
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
-        mPaint.setColor(PaintColor);
+        mPaint.setColor(0xFFFFFFFF);
         mPaint.setStrokeWidth(PaintRadiu);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setMaskFilter(new BlurMaskFilter(8, BlurMaskFilter.Blur.NORMAL));
+        mPaint.setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0X00FFFF00));
+       // mPaint.setMaskFilter(new BlurMaskFilter(8, BlurMaskFilter.Blur.NORMAL));
 
         //橡皮擦
         EraserPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
@@ -120,6 +132,18 @@ public class CanvasDraw extends View implements Runnable{
 //            canvas.drawCircle(preX,preY,PaintRadiu,SmallRadiuPaint);
 //
 //        }else
+        if(CurrentPaint == mPaint)
+            for(int i = 2; i < 5; i++) {
+                if(x % 2 == 0)
+                    mCanvas.drawBitmap(mShaderBitmap, (x - i * 10) - mBitmapBrushDimensions.x / i, (y + i * 10) - mBitmapBrushDimensions.y / i, CurrentPaint);
+                else
+                    mCanvas.drawBitmap(mShaderBitmap, (x + i * 10) - mBitmapBrushDimensions.x / i, (y - i * 10) - mBitmapBrushDimensions.y / i, CurrentPaint);
+                if(y % 2 == 0)
+                    mCanvas.drawBitmap(mShaderBitmap, (x - i * 10) - mBitmapBrushDimensions.x / i, (y - i * 10) - mBitmapBrushDimensions.y / i, CurrentPaint);
+                else
+                    mCanvas.drawBitmap(mShaderBitmap, (x + i * 10) - mBitmapBrushDimensions.x / i, (y + i * 10) - mBitmapBrushDimensions.y / i, CurrentPaint);
+            }
+        else
             mCanvas.drawPath(mPath, CurrentPaint);
     }
 
