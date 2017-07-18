@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CanvasDrawForAndroid.iml" filepath="$PROJECT_DIR$/CanvasDrawForAndroid.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Graffity.iml" filepath="$PROJECT_DIR$/Graffity.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

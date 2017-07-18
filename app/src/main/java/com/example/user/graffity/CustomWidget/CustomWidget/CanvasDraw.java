@@ -101,7 +101,7 @@ public class CanvasDraw extends View implements Runnable{
         //橡皮擦
         EraserPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
         EraserPaint.setColor(Color.TRANSPARENT);
-        EraserPaint.setStrokeWidth(PaintRadiu);
+        EraserPaint.setStrokeWidth(PaintRadiu * 5);
         EraserPaint.setStrokeJoin(Paint.Join.ROUND);
         EraserPaint.setStrokeCap(Paint.Cap.ROUND);
         EraserPaint.setStyle(Paint.Style.STROKE);
@@ -132,17 +132,19 @@ public class CanvasDraw extends View implements Runnable{
 //            canvas.drawCircle(preX,preY,PaintRadiu,SmallRadiuPaint);
 //
 //        }else
-        if(CurrentPaint == mPaint)
-            for(int i = 2; i < 5; i++) {
-                if(x % 2 == 0)
-                    mCanvas.drawBitmap(mShaderBitmap, (x - i * 10) - mBitmapBrushDimensions.x / i, (y + i * 10) - mBitmapBrushDimensions.y / i, CurrentPaint);
-                else
-                    mCanvas.drawBitmap(mShaderBitmap, (x + i * 10) - mBitmapBrushDimensions.x / i, (y - i * 10) - mBitmapBrushDimensions.y / i, CurrentPaint);
-                if(y % 2 == 0)
-                    mCanvas.drawBitmap(mShaderBitmap, (x - i * 10) - mBitmapBrushDimensions.x / i, (y - i * 10) - mBitmapBrushDimensions.y / i, CurrentPaint);
-                else
-                    mCanvas.drawBitmap(mShaderBitmap, (x + i * 10) - mBitmapBrushDimensions.x / i, (y + i * 10) - mBitmapBrushDimensions.y / i, CurrentPaint);
-            }
+        if(CurrentPaint == mPaint) {
+            mCanvas.drawBitmap(mShaderBitmap,x - mBitmapBrushDimensions.x / 2,y - mBitmapBrushDimensions.y / 2, CurrentPaint);
+//            for (int i = 2; i < 5; i++) {
+//                if (x % 2 == 0)
+//                    mCanvas.drawBitmap(mShaderBitmap, (x - i * 10) - mBitmapBrushDimensions.x / i, (y + i * 10) - mBitmapBrushDimensions.y / i, CurrentPaint);
+//                else
+//                    mCanvas.drawBitmap(mShaderBitmap, (x + i * 10) - mBitmapBrushDimensions.x / i, (y - i * 10) - mBitmapBrushDimensions.y / i, CurrentPaint);
+//                if (y % 2 == 0)
+//                    mCanvas.drawBitmap(mShaderBitmap, (x - i * 10) - mBitmapBrushDimensions.x / i, (y - i * 10) - mBitmapBrushDimensions.y / i, CurrentPaint);
+//                else
+//                    mCanvas.drawBitmap(mShaderBitmap, (x + i * 10) - mBitmapBrushDimensions.x / i, (y + i * 10) - mBitmapBrushDimensions.y / i, CurrentPaint);
+//            }
+        }
         else
             mCanvas.drawPath(mPath, CurrentPaint);
     }
@@ -176,6 +178,7 @@ public class CanvasDraw extends View implements Runnable{
 //                    }else
 //                    {
                         mPath.quadTo(preX, preY, (x + preX) / 2.0f, (y + preY) / 2.0f);
+                        
                         preX = x;
                         preY = y;
 //                    }

@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -14,8 +15,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.user.graffity.CustomWidget.CustomWidget.ColorPicker;
+import com.example.user.graffity.CustomWidget.EmailData.SPHelper;
 import com.example.user.graffity.CustomWidget.Fragment.CanvasFragment;
 import com.example.user.graffity.CustomWidget.State.BrushState;
 import com.example.user.graffity.CustomWidget.State.CanvasState;
@@ -49,6 +52,17 @@ public class DisplayActivity extends AppCompatActivity {
         SetInit();
         SetEvent();
         ShowCanvas();
+
+//        if(SPHelper.LoadEmailFromSharedPreference(this) != "")
+//        {
+//            Toast.makeText(this, SPHelper.LoadEmailFromSharedPreference(this), Toast.LENGTH_SHORT).show();
+//        }
+
+        Intent intent = getIntent();
+        if(intent != null)
+        {
+            SPHelper.SaveEmailToSharedPreference(this, intent.getStringExtra("Email"));
+        }
     }
 
     @Override
